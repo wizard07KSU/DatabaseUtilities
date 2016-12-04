@@ -163,6 +163,50 @@ namespace Cannon.DatabaseUtilities
         #endregion
 
         #region Execute Command
+
+        /// <summary>
+        /// Executes the provided SQL command on the connected database. Used 
+        /// when the caller doesn't care about the returned value.
+        /// </summary>
+        /// <param name="aCommandText">
+        /// The text of the command to execute.
+        /// </param>
+        /// <returns>
+        /// Returns the result of executing this query on the database, or 0 
+        /// if there was no result.
+        /// </returns>
+        public long ExecuteCommand( string aCommandText )
+        {
+            return this.ExecuteCommand(
+                aCommandText : aCommandText,
+                aTransaction : null,
+                aParameters  : new ParameterCollection() );
+        }
+
+        /// <summary>
+        /// Executes the provided SQL command on the connected database. Used 
+        /// when the caller doesn't care about the returned value.
+        /// </summary>
+        /// <param name="aCommandText">
+        /// The text of the command to execute.
+        /// </param>
+        /// <param name="aTransaction">
+        /// The transaction to execute this command in.
+        /// </param>
+        /// <returns>
+        /// Returns the result of executing this query on the database, or 0 
+        /// if there was no result.
+        /// </returns>
+        public long ExecuteCommand(
+            string aCommandText,
+            DbTransaction aTransaction )
+        {
+            return this.ExecuteCommand(
+                aCommandText : aCommandText,
+                aTransaction : aTransaction,
+                aParameters  : new ParameterCollection() );
+        }
+
         /// <summary>
         /// Executes the provided SQL command on the connected database. Used 
         /// when the caller doesn't care about the returned value.
@@ -191,9 +235,23 @@ namespace Cannon.DatabaseUtilities
 
             return mDatabase.ExecuteCommand( lCommand );
         }
+
         #endregion
 
         #region Execute Query
+
+        public ICollection<T> ExecuteQuery<T>(
+            string aCommandText,
+            DbTransaction aTransaction,
+            ParameterCollection aParameters )
+        {
+            DbCommand lCommand = mDatabase.Connection.CreateCommand();
+            lCommand.Transaction = aTransaction;
+            lCommand.Parameters.AddRange( aParameters.Parameters.ToArray() );
+
+            return mDatabase.ExecuteCommand( lCommand );
+        }
+
         #endregion
 
 
