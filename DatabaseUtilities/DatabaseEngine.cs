@@ -165,8 +165,7 @@ namespace Cannon.DatabaseUtilities
         #region Execute Command
 
         /// <summary>
-        /// Executes the provided SQL command on the connected database. Used 
-        /// when the caller doesn't care about the returned value.
+        /// Executes the provided SQL command on the connected database.
         /// </summary>
         /// <param name="aCommandText">
         /// The text of the command to execute.
@@ -184,8 +183,7 @@ namespace Cannon.DatabaseUtilities
         }
 
         /// <summary>
-        /// Executes the provided SQL command on the connected database. Used 
-        /// when the caller doesn't care about the returned value.
+        /// Executes the provided SQL command on the connected database.
         /// </summary>
         /// <param name="aCommandText">
         /// The text of the command to execute.
@@ -208,9 +206,7 @@ namespace Cannon.DatabaseUtilities
         }
 
         /// <summary>
-        /// Executes the provided SQL command on the connected database. Used 
-        /// when the caller doesn't care about the returned value.
-        /// </summary>
+        /// Executes the provided SQL command on the connected database.
         /// <param name="aCommandText">
         /// The text of the command to execute.
         /// </param>
@@ -240,6 +236,21 @@ namespace Cannon.DatabaseUtilities
 
         #region Execute Query
 
+        /// <summary>
+        /// Executes the provided SQL query on the connected database and 
+        /// returns a collection of a caller-specified type.
+        /// </summary>
+        /// <param name="aCommandText">
+        /// The text of the query to execute.
+        /// </param>
+        /// <param name="aConverter">
+        /// A callback function to convert rows returned by the query into 
+        /// instances of a caller-specified type.
+        /// </param>
+        /// <returns>
+        /// Returns a collection of objects of a user-specified type that were
+        /// returned by executing this query.
+        /// </returns>
         public ICollection<T> ExecuteQuery<T>(
             string                aCommandText,
             Func<DbDataReader, T> aConverter   )
@@ -250,6 +261,25 @@ namespace Cannon.DatabaseUtilities
                 aTransaction : null        ,
                 aParameters  : new ParameterCollection() );
         }
+
+        /// <summary>
+        /// Executes the provided SQL query on the connected database and 
+        /// returns a collection of a caller-specified type.
+        /// </summary>
+        /// <param name="aCommandText">
+        /// The text of the query to execute.
+        /// </param>
+        /// <param name="aConverter">
+        /// A callback function to convert rows returned by the query into 
+        /// instances of a caller-specified type.
+        /// </param>
+        /// <param name="aTransaction">
+        /// The transaction to execute this query in.
+        /// </param>
+        /// <returns>
+        /// Returns a collection of objects of a user-specified type that were
+        /// returned by executing this query.
+        /// </returns>
         public ICollection<T> ExecuteQuery<T>(
             string                aCommandText,
             Func<DbDataReader, T> aConverter  ,
@@ -261,6 +291,28 @@ namespace Cannon.DatabaseUtilities
                 aTransaction : aTransaction,
                 aParameters  : new ParameterCollection() );
         }
+
+        /// <summary>
+        /// Executes the provided SQL query on the connected database and 
+        /// returns a collection of a caller-specified type.
+        /// </summary>
+        /// <param name="aCommandText">
+        /// The text of the query to execute.
+        /// </param>
+        /// <param name="aConverter">
+        /// A callback function to convert rows returned by the query into 
+        /// instances of a caller-specified type.
+        /// </param>
+        /// <param name="aTransaction">
+        /// The transaction to execute this query in.
+        /// </param>
+        /// <param name="aParameters">
+        /// The collection of parameters to use when executing this query.
+        /// </param>
+        /// <returns>
+        /// Returns a collection of objects of a user-specified type that were
+        /// returned by executing this query.
+        /// </returns>
         public ICollection<T> ExecuteQuery<T>(
             string                aCommandText,
             Func<DbDataReader, T> aConverter  ,
