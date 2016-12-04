@@ -145,7 +145,7 @@ namespace Cannon.DatabaseUtilities
         /// <param name="aCommand"></param>
         /// <param name="aConverter"></param>
         /// <returns></returns>
-        public List<T> QueryDatabase<T>( DbCommand aCommand, Func<object[], T> aConverter )
+        public List<T> QueryDatabase<T>( DbCommand aCommand, Func<DbDataReader, T> aConverter )
         {
             List<T> lToReturn = new List<T>();
             try
@@ -154,9 +154,7 @@ namespace Cannon.DatabaseUtilities
                 {
                     while ( reader.Read() )
                     {
-                        object[] values = new object[reader.FieldCount];
-                        reader.GetValues( values );
-                        lToReturn.Add( aConverter( values ) );
+                        lToReturn.Add( aConverter( reader ) );
                     }
                     reader.Close();
                 }

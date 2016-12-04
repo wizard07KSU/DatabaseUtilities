@@ -241,15 +241,39 @@ namespace Cannon.DatabaseUtilities
         #region Execute Query
 
         public ICollection<T> ExecuteQuery<T>(
-            string aCommandText,
-            DbTransaction aTransaction,
-            ParameterCollection aParameters )
+            string                aCommandText,
+            Func<DbDataReader, T> aConverter   )
+        {
+            return this.ExecuteQuery(
+                aCommandText : aCommandText,
+                aConverter   : aConverter  ,
+                aTransaction : null        ,
+                aParameters  : new ParameterCollection() );
+        }
+        public ICollection<T> ExecuteQuery<T>(
+            string                aCommandText,
+            Func<DbDataReader, T> aConverter  ,
+            DbTransaction         aTransaction )
+        {
+            return this.ExecuteQuery(
+                aCommandText : aCommandText,
+                aConverter   : aConverter  ,
+                aTransaction : aTransaction,
+                aParameters  : new ParameterCollection() );
+        }
+        public ICollection<T> ExecuteQuery<T>(
+            string                aCommandText,
+            Func<DbDataReader, T> aConverter  ,
+            DbTransaction         aTransaction,
+            ParameterCollection   aParameters  )
         {
             DbCommand lCommand = mDatabase.Connection.CreateCommand();
             lCommand.Transaction = aTransaction;
             lCommand.Parameters.AddRange( aParameters.Parameters.ToArray() );
 
-            return mDatabase.ExecuteCommand( lCommand );
+            return mDatabase.QueryDatabase( 
+                aCommand   : lCommand,
+                aConverter : aConverter );
         }
 
         #endregion
