@@ -159,6 +159,12 @@ namespace Cannon.DatabaseUtilities
         /// Thrown when a query fails to execute. See the Inner Exception for 
         /// details.
         /// </exception>
+        /// <remarks>
+        /// Can be used to query the database to return result sets of arbitrary
+        /// types. The callback function itself can iterate over the result set
+        /// if neccessary. This function will stop iterating when a call to the
+        /// DbDataReader.Read function returns false.
+        /// </remarks>
         public List<T> QueryDatabase<T>( DbCommand aCommand, Func<DbDataReader, T> aConverter )
         {
             List<T> lToReturn = new List<T>();

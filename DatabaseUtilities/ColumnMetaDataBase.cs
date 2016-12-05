@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Cannon.DatabaseUtilities
 {
+    /// <summary>
+    /// Contains all the information necessary to initialize a single column
+    /// of a Table Valued Parameter dataset.
+    /// </summary>
     public class ColumnMetaDataBase
     {
         #region Properties
@@ -26,11 +30,35 @@ namespace Cannon.DatabaseUtilities
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColumnMetaDataBase"/> 
+        /// class.
+        /// </summary>
+        /// <param name="aColumnName">
+        /// The name of the column in the database table type.
+        /// </param>
+        /// <param name="aColumnLength">
+        /// The maximum length of the column.
+        /// </param>
         public ColumnMetaDataBase(
             string aColumnName,
             int aColumnLength )
             : this( aColumnName, aColumnLength, null ) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColumnMetaDataBase"/> 
+        /// class.
+        /// </summary>
+        /// <param name="aColumnName">
+        /// The name of the column in the database table type.
+        /// </param>
+        /// <param name="aColumnLength">
+        /// The maximum length of the column.
+        /// </param>
+        /// <param name="aPropertyName">
+        /// The name of the property on the values going into a Table Valued
+        /// Parameter which holds the value for this column.
+        /// </param>
         public ColumnMetaDataBase(
             string aColumnName  ,
             int    aColumnLength,

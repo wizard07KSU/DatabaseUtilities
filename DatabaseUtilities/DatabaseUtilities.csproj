@@ -40,8 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColumnMetaDataBase.cs" />
+    <Compile Include="CommonUtilities.cs" />
     <Compile Include="DatabaseEngine.cs" />
+    <Compile Include="DatabaseWrapper.cs" />
     <Compile Include="Engines\MssqlEngine.cs" />
+    <Compile Include="Exceptions\DatabaseQueryException.cs" />
+    <Compile Include="MetaData\SqlColumnMetaData.cs" />
+    <Compile Include="ParameterCollection.cs" />
     <Compile Include="ParameterCollections\MssqlParameterCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

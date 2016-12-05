@@ -9,10 +9,16 @@ using System.Threading.Tasks;
 
 namespace Cannon.DatabaseUtilities
 {
+    /// <summary>
+    /// Base class for all database engines.
+    /// </summary>
     public abstract class DatabaseEngine : IDisposable
     {
         #region Variables
 
+        /// <summary>
+        /// The database this engine is connected to.
+        /// </summary>
         private DatabaseWrapper mDatabase = null;
 
         /// <summary>
@@ -208,6 +214,7 @@ namespace Cannon.DatabaseUtilities
 
         /// <summary>
         /// Executes the provided SQL command on the connected database.
+        /// </summary>
         /// <param name="aCommandText">
         /// The text of the command to execute.
         /// </param>
@@ -232,6 +239,21 @@ namespace Cannon.DatabaseUtilities
 
             return this.ExecuteCommand( lCommand );
         }
+
+        /// <summary>
+        /// Executes the provided SQL command on the connected database.
+        /// </summary>
+        /// <param name="aCommand">
+        /// The command to execute.
+        /// </param>
+        /// <returns>
+        /// Returns the result of executing this query on the database, or 0 
+        /// if there was no result.
+        /// </returns>
+        /// <remarks>
+        /// Can be used by derived classes when extra custimization of a command
+        /// is necessary.
+        /// </remarks>
         public long ExecuteCommand(
             DbCommand aCommand )
         {
@@ -246,6 +268,9 @@ namespace Cannon.DatabaseUtilities
         /// Executes the provided SQL query on the connected database and 
         /// returns a collection of a caller-specified type.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to generate from the database.
+        /// </typeparam>
         /// <param name="aCommandText">
         /// The text of the query to execute.
         /// </param>
@@ -272,6 +297,9 @@ namespace Cannon.DatabaseUtilities
         /// Executes the provided SQL query on the connected database and 
         /// returns a collection of a caller-specified type.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to generate from the database.
+        /// </typeparam>
         /// <param name="aCommandText">
         /// The text of the query to execute.
         /// </param>
@@ -302,6 +330,9 @@ namespace Cannon.DatabaseUtilities
         /// Executes the provided SQL query on the connected database and 
         /// returns a collection of a caller-specified type.
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to generate from the database.
+        /// </typeparam>
         /// <param name="aCommandText">
         /// The text of the query to execute.
         /// </param>
@@ -334,6 +365,28 @@ namespace Cannon.DatabaseUtilities
                 aConverter : aConverter );
         }
 
+        /// <summary>
+        /// Executes the provided SQL query on the connected database and 
+        /// returns a collection of a caller-specified type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to generate from the database.
+        /// </typeparam>
+        /// <param name="aCommandText">
+        /// The text of the query to execute.
+        /// </param>
+        /// <param name="aConverter">
+        /// A callback function to convert rows returned by the query into 
+        /// instances of a caller-specified type.
+        /// </param>
+        /// <returns>
+        /// Returns a collection of objects of a user-specified type that were
+        /// returned by executing this query.
+        /// </returns>
+        /// <remarks>
+        /// Can be used by derived classes when extra custimization of a command
+        /// is necessary.
+        /// </remarks>
         public ICollection<T> ExecuteQuery<T>(
             DbCommand             aCommand  ,
             Func<DbDataReader, T> aConverter )
@@ -342,6 +395,7 @@ namespace Cannon.DatabaseUtilities
                 aCommand  : aCommand,
                 aConverter: aConverter );
         }
+
         #endregion
 
 

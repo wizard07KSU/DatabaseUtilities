@@ -12,18 +12,37 @@ using System.Threading.Tasks;
 
 namespace Cannon.DatabaseUtilities.ParameterCollections
 {
+    /// <summary>
+    /// Collection of <see cref="SqlParameter"/> objects to be used in a 
+    /// database query/command.
+    /// </summary>
     public class MssqlParameterCollection : ParameterCollection
     {
 
+        /// <summary>
+        /// Initializes a new, empty instance of the <see cref="MssqlParameterCollection"/> 
+        /// class.
+        /// </summary>
         public MssqlParameterCollection()
         {
         }
 
+        /// <summary>
+        /// Used by base class to create a new <see cref="SqlParameter"/> object.
+        /// </summary>
+        /// <returns>
+        /// Returns a newly created <see cref="SqlParameter"/> object.
+        /// </returns>
         protected override DbParameter CreateNewParameter()
         {
             return new SqlParameter();
         }
 
+        #region Lookup Tables
+        /// <summary>
+        /// A lookup table from .NET CLR types to SQL DB Types. Used when creating SQL objects
+        /// that need a specific <see cref="SqlDbType"/> .
+        /// </summary>
         private Dictionary<Type, SqlDbType> lSqlTypeLookup = new Dictionary<Type, SqlDbType>()
         {
             { typeof( short   ), SqlDbType.SmallInt },
@@ -51,6 +70,23 @@ namespace Cannon.DatabaseUtilities.ParameterCollections
             { typeof( double  ), "SetDouble"  },
             { typeof( string  ), "SetString"  }
         };
+        #endregion
+
+        /// <summary>
+        /// Adds a single, named string-type parameter to this collection.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The CLR data-type of the value to add.
+        /// </typeparam>
+        /// <param name="aParameterName">
+        /// The name of this parameter.
+        /// </param>
+        /// <param name="aParameterValue">
+        /// The value of this parameter.
+        /// </param>
+        /// <param name="aParameterLength">
+        /// The maximum length of the column this parameter refers to in the database.
+        /// </param>
         public void Add<T>(
             string aParameterName,
             T aParameterValue,
@@ -62,6 +98,25 @@ namespace Cannon.DatabaseUtilities.ParameterCollections
                 lSqlTypeLookup[ typeof( T ) ],
                 aParameterLength );
         }
+
+        /// <summary>
+        /// Adds a single, named string-type parameter to this collection.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The CLR data-type of the value to add.
+        /// </typeparam>
+        /// <param name="aParameterName">
+        /// The name of this parameter.
+        /// </param>
+        /// <param name="aParameterValue">
+        /// The value of this parameter.
+        /// </param>
+        /// <param name="aDbType">
+        /// The SQL datatype of the value of this parameter.
+        /// </param>
+        /// <param name="aParameterLength">
+        /// The maximum length of the column this parameter refers to in the database.
+        /// </param>
         public void Add<T>(
             string aParameterName,
             T aParameterValue,
@@ -79,6 +134,28 @@ namespace Cannon.DatabaseUtilities.ParameterCollections
             lNewParameter.Value = aParameterValue;
             this.Add( lNewParameter );
         }
+
+        /// <summary>
+        /// Adds a named Table Valued Parameter to this collection.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value in the TVP. For this overload, this type should
+        /// be a .NET CLR type, or some other type for which an implicit conversion
+        /// exists from the .NET type to a SQL type.
+        /// </typeparam>
+        /// <param name="aParameterValues">
+        /// The set of values to be streamed in the table parameter.
+        /// </param>
+        /// <param name="aParameterName">
+        /// The name of the parameter in the text of the SQL statement.
+        /// </param>
+        /// <param name="aSqlTableType">
+        /// The name of the server-side table type this parameter will use.
+        /// </param>
+        /// <param name="aMetaData">
+        /// A meta data object that has information about the column of the
+        /// table type to be used.
+        /// </param>
         public void Add<T>(
             ICollection<T> aParameterValues,
             string aParameterName,
