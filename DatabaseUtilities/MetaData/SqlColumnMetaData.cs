@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace Cannon.DatabaseUtilities.MetaData
 {
-    class SqlColumnMetaData
+    public class SqlColumnMetaData : ColumnMetaDataBase
     {
+        public SqlColumnMetaData(
+            string aColumnName,
+            int aColumnLength )
+            : base( aColumnName, aColumnLength, null ) { }
+
+        public SqlColumnMetaData(
+            string aColumnName,
+            int aColumnLength,
+            string aPropertyName )
+            : base( aColumnName, aColumnLength, aPropertyName ) { }
     }
 }

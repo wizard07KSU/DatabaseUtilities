@@ -10,17 +10,12 @@ namespace Cannon.DatabaseUtilities.Engines
     public class MssqlEngine : DatabaseEngine
     {
         public MssqlEngine( string aConnectionString )
+            :base( new SqlConnection( aConnectionString ) )
         {
-            this.mConnection = new SqlConnection( aConnectionString );
-            this.DatabaseName = mConnection.Database;
             this.OpenDatabase();
         }
 
         public MssqlEngine( SqlConnectionStringBuilder aConnectionString )
-        {
-            this.mConnection = new SqlConnection( aConnectionString.ConnectionString );
-            this.DatabaseName = mConnection.Database;
-            this.OpenDatabase();
-        }
+            : this( aConnectionString.ConnectionString ) { }
     }
 }

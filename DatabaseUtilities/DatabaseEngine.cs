@@ -13,7 +13,7 @@ namespace Cannon.DatabaseUtilities
     {
         #region Variables
 
-        protected DatabaseWrapper mDatabase = null;
+        private DatabaseWrapper mDatabase = null;
 
         /// <summary>
         /// The maximum number of times to attempt to close a connection before
@@ -60,6 +60,7 @@ namespace Cannon.DatabaseUtilities
         protected DatabaseEngine( DbConnection aConnection )
         {
             mDatabase = new DatabaseWrapper( aConnection );
+            this.DatabaseName = aConnection.Database;
         }
 
         #endregion
@@ -229,7 +230,12 @@ namespace Cannon.DatabaseUtilities
             lCommand.Transaction = aTransaction;
             lCommand.Parameters.AddRange( aParameters.Parameters.ToArray() );
 
-            return mDatabase.ExecuteCommand( lCommand );
+            return this.ExecuteCommand( lCommand );
+        }
+        public long ExecuteCommand(
+            DbCommand aCommand )
+        {
+            return mDatabase.ExecuteCommand( aCommand );
         }
 
         #endregion
@@ -323,11 +329,19 @@ namespace Cannon.DatabaseUtilities
             lCommand.Transaction = aTransaction;
             lCommand.Parameters.AddRange( aParameters.Parameters.ToArray() );
 
-            return mDatabase.QueryDatabase( 
+            return this.ExecuteQuery( 
                 aCommand   : lCommand,
                 aConverter : aConverter );
         }
 
+        public ICollection<T> ExecuteQuery<T>(
+            DbCommand             aCommand  ,
+            Func<DbDataReader, T> aConverter )
+        {
+            return mDatabase.QueryDatabase(
+                aCommand  : aCommand,
+                aConverter: aConverter );
+        }
         #endregion
 
 
